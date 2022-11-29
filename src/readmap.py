@@ -1,5 +1,10 @@
+from __future__ import annotations
+from parsers import parse_fasta, parse_fastq
+from fm import fm_index
 import argparse
 import sys
+import pickle
+import os
 
 
 def main():
@@ -29,13 +34,30 @@ def main():
 
     if args.p:
         print(f"Preprocess {args.genome}")
+        genome = parse_fasta(args.genome)
+        processed_genome = {chr: fm_index(genome[chr]) for chr in genome}
+        with open(f"{args.genome.name}.bin", "wb") as file:
+            pickle.dump(processed_genome, file)
+
     else:
         # here we need the optional argument reads
         if args.reads is None:
             argparser.print_help()
             sys.exit(1)
-        print(
-            f"Search {args.genome} for {args.reads} within distance {args.d}")
+        try:
+            with open(f"{args.genome.name}.bin", "rb") as file:
+                genome = pickle.load(file)
+        except FileNotFoundError:
+            print(
+                f"{args.genome.name} has not been preprocessed, you should probably do that... see how here:")
+            argparser.print_help()
+            sys.exit(1)
+
+        reads = parse_fastq(args.reads)
+
+        for chr in genome:
+            for read in reads:
+                print(genome[chr].approx_match(reads[read], args.d))
 
 
 if __name__ == '__main__':
