@@ -163,6 +163,63 @@ class fm_index:
     def __repr__(self) -> str:
         return f"{self.rx.x}\n{self.sa}\n{self.o}\n{self.c}"
 
+    def match_no_d(self, p: str, k: int) -> list[str]:
+        if not p or self.rx.x == '$':
+            return []
+        d_table = [0 for _ in p]
+        l, r = 0, len(self.sa)
+        min_edits = 0
+        for i, a in enumerate(p[::-1]):
+            l = self.c[a] + self.ro[l][self.a_map[a]]
+            r = self.c[a] + self.ro[r][self.a_map[a]]
+            if l >= r:
+                min_edits += 1
+                l, r = 0, len(self.sa)
+            d_table[i] = min_edits
+        cigars = []
+        start = len(p)-1
+        self.rec(p, l, r, start, k, cigars, d_table)
+        return cigars
+
+    def rec(self, p: str, l: int, r: int, i: int, k: int, cigars: list[str], d: list[int],  cig: str = ''):
+        # match
+        if k < d[i]:
+            return
+        if i < 0:
+            cigars.append(cig)
+            return
+        ma = p[i]
+
+        for _, a in enumerate(self.a_map, 1):
+            new_l = self.c[a] + self.o[l][self.a_map[a]]
+            new_r = self.c[a] + self.o[r][self.a_map[a]]
+
+            edit_cost = 1 if ma == a else 0
+            if k - edit_cost == 0:
+                continue
+            if l >= r:
+                continue
+            new_cig = cig[:]
+            new_cig += 'M'
+            self.rec(p, new_l, new_r, i-1, k-edit_cost, cigars, d, new_cig)
+            # cigars.append(new_cig)
+
+        # ins
+        new_cig = cig[:]+'I'
+        #cig += 'I'
+        self.rec(p, l, r, i-1, k-1, cigars, d, new_cig)
+        # cigars.append(new_cig)
+
+        # del
+        new_cig = cig[:] + 'D'
+        for _, a in enumerate(self.a_map, 1):
+            new_l = self.c[a] + self.o[l][self.a_map[a]]
+            new_r = self.c[a] + self.o[r][self.a_map[a]]
+            if new_l >= new_r:
+                continue
+            self.rec(p, new_l, new_r, i, k-1, cigars, d, new_cig)
+            # cigars.append(new_cig)
+
 
 def sa_construct(x: str) -> list[int]:
     '''
