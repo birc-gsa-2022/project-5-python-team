@@ -57,7 +57,9 @@ def main():
 
         for chr in genome:
             for read in reads:
-                print(genome[chr].search_approx_pattern(genome[chr].root, read, args.d, 0, "", 0, 0))
+                print(reads[read])
+                print(genome[chr].x)
+                print(genome[chr].search_approx(reads[read],1))
 
 
 if __name__ == '__main__':
