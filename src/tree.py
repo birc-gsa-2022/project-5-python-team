@@ -148,9 +148,10 @@ class SuffixTree:
             new_cigar=cigar[:]+"I"
             search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)
 
-            #Deletion:
-            new_cigar=cigar[:]+"D"
-            search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i)
-            return
+            if "M" in cigar:
+                #Deletion:
+                new_cigar=cigar[:]+"D"
+                search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i)
+                return
         search_approx_pattern(self.root,p,edits,0,"",0,0)
         return good_list
