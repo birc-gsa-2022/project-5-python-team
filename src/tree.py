@@ -115,7 +115,7 @@ class SuffixTree:
     
     def search_approx(self, p, edits):
         good_list=[]
-        def search_approx_pattern(node:Knæ, p:str, edits:int,k:int, cigar:list, j:int, i:int)-> list[list,str]:
+        def search_approx_pattern(node:Knæ, p:str, edits:int,k:int, cigar:str, j:int, i:int)-> list[list,str]:
             print(edits, k, j, i)
             print("".join(cigar))
             u = node.ben[0]
@@ -139,18 +139,18 @@ class SuffixTree:
 
             #Match/substitution:
             if self.x[u+i]==p[j]:
-                cigar.append("M")
-                search_approx_pattern(node,p, edits,k+1, cigar, j+1, i+1)
+                new_cigar=cigar[:]+"M"
+                search_approx_pattern(node,p, edits,k+1, new_cigar, j+1, i+1)
             else:
-                cigar.append("M")
-                search_approx_pattern(node,p, edits-1,k+1, cigar, j+1, i+1)
+                new_cigar=cigar[:]+"M"
+                search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i+1)
             #Insertion:
-            cigar[k]="I"
-            search_approx_pattern(node,p, edits-1,k+1, cigar, j, i+1)
+            new_cigar=cigar[:]+"I"
+            search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)
 
             #Deletion:
-            cigar[k]="D"
-            search_approx_pattern(node,p, edits-1,k+1, cigar, j, i)
+            new_cigar=cigar[:]+"D"
+            search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i)
             return
-        search_approx_pattern(self.root,p,edits,0,[],0,0)
+        search_approx_pattern(self.root,p,edits,0,"",0,0)
         return good_list
