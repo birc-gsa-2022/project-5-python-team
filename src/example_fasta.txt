@@ -1,4 +1,2 @@
 > chr1
-mississippi
-> chr2
-mississippimississippi
+cababa
