@@ -1,6 +1,7 @@
 from __future__ import annotations
 from parsers import parse_fasta, parse_fastq
 from tree import SuffixTree
+from cigar import edits_to_cigar
 import argparse
 import sys
 import pickle
@@ -55,11 +56,32 @@ def main():
 
         reads = parse_fastq(args.reads)
 
-        for chr in genome:
-            for read in reads:
-                # print(reads[read])
-                # print(genome[chr].x)
-                print(read, genome[chr].search_approx(reads[read],args.d))
+        out=[]
+        for i, chr in enumerate(genome):
+            for j, read in enumerate(reads):
+                gg=genome[chr].search_approx(reads[read],args.d)
+                if gg:
+                    for edit in gg:
+                        for position in edit[0]:
+                            out.append(
+                                f'{read}\t{chr}\t{int(position)+1}\t{edits_to_cigar(edit[1])}\t{reads[read]}'
+                            )
+        out.sort()
+        print('\n'.join(out))
+
+
+        # out = []
+        # for i, chr in enumerate(genome):
+        #     for hitlist in hits[i]:
+        #         print(hitlist)
+        #         for hit in hitlist:
+        #             #print(hit)
+        #             if hit:
+        #                 for hot in hit[0]:
+        #                     out.append(
+        #                         f'{read}\t{chr}\t{int(hot)+1}\t{edits_to_cigar(hit[1])}\t{reads[read]}')
+        # out.sort()
+        # print('\n'.join(out))
 
 
 if __name__ == '__main__':
