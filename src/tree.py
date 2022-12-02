@@ -115,43 +115,52 @@ class SuffixTree:
     
     def search_approx(self, p, edits):
         good_list=[]
+        def removEnDs(good_list):
+            x=True
+            while x:
+                x=False
+                for i, a in enumerate(good_list):
+                    if a[1][-1]=="D":
+                        del good_list[i]
+                        x=True
+            return good_list
+        
         def search_approx_pattern(node:Knæ, p:str, edits:int,k:int, cigar:str, j:int, i:int)-> list[list,str]:
-            print(edits, k, j, i)
-            print("".join(cigar))
+            #print(edits, k, j, i)
+            #print("".join(cigar))
             u = node.ben[0]
             v = node.ben[1]
             P = len(p)
             if edits<0:
-                print("edits<0")
+                #print("edits<0")
                 return
             if j>=P:
                 good_list.append([list(self.bft(node)),"".join(cigar)])
-                print("HIT!")
+                #print("HIT!")
                 return
             if self.x[u+i]=="$" and type(node.children) == int:
-                print("reached end of branch")
+                #print("reached end of branch")
                 return
             if i == v-u:
-                print("This is a node")
+                #print("This is a node")
                 for n in node.children:
                     search_approx_pattern(node.children[n],p, edits, k, cigar, j, 0)
                 return
 
             #Match/substitution:
             if self.x[u+i]==p[j]:
-                new_cigar=cigar[:]+"M"
+                new_cigar=cigar+"M"
                 search_approx_pattern(node,p, edits,k+1, new_cigar, j+1, i+1)
             else:
-                new_cigar=cigar[:]+"M"
+                new_cigar=cigar+"S"
                 search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i+1)
             #Insertion:
-            new_cigar=cigar[:]+"I"
+            new_cigar=cigar+"I"
             search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)
-
+            #Deletion:
             if "M" in cigar:
-                #Deletion:
-                new_cigar=cigar[:]+"D"
+                new_cigar=cigar+"D"
                 search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i)
                 return
         search_approx_pattern(self.root,p,edits,0,"",0,0)
-        return good_list
+        return removEnDs(good_list)
