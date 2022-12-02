@@ -27,7 +27,7 @@ class SuffixTree:
         '''
         The class SuffixTree is initialized by being created from a string x. Knæ are created so that Knæ.ben is a tuple including first index and excluding last index. This is the naive implementation. \n
         Creating suffix tree T for string x:
-        >>> T=SuffixTree(x)
+        T=SuffixTree(x)
         '''
         self.x = x + '$'
         self.root = Knæ(None, (0, 0), {})
@@ -86,11 +86,11 @@ class SuffixTree:
         '''
         Searches for exact pattern matches of p in self.x of the SuffixTree.\n
         Returns empty list, [], if pattern is the empty string or does not occur in x. E.g.: T=SuffixTree("ABAAB")
-        >>> T.search_for_pattern("AB")
+        T.search_for_pattern("AB")
         Returns [0,3]
-        >>> T.search_for_pattern("")
+        T.search_for_pattern("")
         Returns []
-        >>> T.search_for_pattern("BB")
+        T.search_for_pattern("BB")
         Returns []
         '''
         current = self.root
