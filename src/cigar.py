@@ -23,29 +23,6 @@ def split_pairs(cigar: str) -> "list[tuple[int, str]]":
     # regular expressions make this a reasonable solution.
     return [(int(i), op) for i, op in re.findall(r"(\d+)([^\d]+)", cigar)]
 
-
-def cigar_to_edits(cigar: str) -> str:
-    """Expand the compressed CIGAR encoding into the full list of edits.
-
-    Args:
-        cigar (str): A CIGAR string
-
-    Returns:
-        str: The edit operations the CIGAR string describes.
-
-    >>> cigar_to_edits("1M1D6M1I4M")
-    'MDMMMMMMIMMMM'
-
-    """
-    # FIXME: construct the edits sequence
-    edits = ''
-    edit_pairs = split_pairs(cigar)
-    for edit in edit_pairs:
-        edits += edit[0] * edit[1]
-
-    return ""
-
-
 def split_blocks(x: str) -> "list[str]":
     """Split a string into blocks of equal character.
 
