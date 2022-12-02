@@ -1,6 +1,6 @@
 from __future__ import annotations
 from parsers import parse_fasta, parse_fastq
-from fm import fm_index
+from tree import SuffixTree
 import argparse
 import sys
 import pickle
@@ -35,7 +35,7 @@ def main():
     if args.p:
         print(f"Preprocess {args.genome}")
         genome = parse_fasta(args.genome)
-        processed_genome = {chr: fm_index(genome[chr]) for chr in genome}
+        processed_genome = {chr: SuffixTree(genome[chr]) for chr in genome}
         with open(f"{args.genome.name}.bin", "wb") as file:
             pickle.dump(processed_genome, file)
 
@@ -57,7 +57,7 @@ def main():
 
         for chr in genome:
             for read in reads:
-                print(genome[chr].approx_match(reads[read], args.d))
+                print(genome[chr].search_approx_pattern(genome[chr].root, read, args.d, 0, "", 0, 0))
 
 
 if __name__ == '__main__':
