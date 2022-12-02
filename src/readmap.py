@@ -70,19 +70,5 @@ def main():
         print('\n'.join(out))
 
 
-        # out = []
-        # for i, chr in enumerate(genome):
-        #     for hitlist in hits[i]:
-        #         print(hitlist)
-        #         for hit in hitlist:
-        #             #print(hit)
-        #             if hit:
-        #                 for hot in hit[0]:
-        #                     out.append(
-        #                         f'{read}\t{chr}\t{int(hot)+1}\t{edits_to_cigar(hit[1])}\t{reads[read]}')
-        # out.sort()
-        # print('\n'.join(out))
-
-
 if __name__ == '__main__':
     main()

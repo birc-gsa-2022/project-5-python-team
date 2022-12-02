@@ -114,6 +114,8 @@ class SuffixTree:
     
     
     def search_approx(self, p, edits):
+        if p == "" or self.x == "$":
+            return []
         good_list=[]
         def removEnDs(good_list):
             x=True
