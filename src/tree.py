@@ -158,7 +158,7 @@ class SuffixTree:
                 search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i+1)
             
             #Deletion:
-            if "M" in cigar:
+            if "M" in cigar or "I" in cigar:
             #Insertion:
                 new_cigar=cigar+"D"
                 search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)   
