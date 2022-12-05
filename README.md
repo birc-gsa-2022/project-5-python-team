@@ -102,7 +102,7 @@ Once you have implemented the `readmap` program (and tested it to the best of yo
 
 # Report
 
-The GitHub tests fail our output as your script does not sort the reads the same way as we do. We just used .sort() after outputting. Otherwise they should be identical. 
+Your script does not sort the reads the same way as we do. We just used .sort() after outputting. Otherwise they should be identical. 
 
 ## Algorithm
 
