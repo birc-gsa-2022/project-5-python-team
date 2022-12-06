@@ -102,19 +102,34 @@ Once you have implemented the `readmap` program (and tested it to the best of yo
 
 # Report
 
+Your script does not sort the reads the same way as we do. We just used .sort() after outputting. Otherwise they should be identical. 
+
 ## Algorithm
 
-*Which algorithm did you use for read mapping?*
+The algorithm used for preprocessing is the naive implementation of the suffix tree from project 2. First, we tried with FM-index, but when we could not get the approximate search to work, we turned to the old trusty suffix tree with our well-known and loved Knæ and ben. We wanted to implement McCreights linear suffix tree construction to get better preprocessing times, but after spending a lot of time on FM-index search we just needed something that worked.
 
 ## Insights you may have had while implementing the algorithm
 
+Branch and bound search in a tree is really fast. Even in Python.
+
 ## Problems encountered if any
+
+We spent a long time trying to implement approximate search in our FM-index. It just would not work. :C
+
+We're unsure about your definition of deletions and insertions, but it didn't prove much trouble as it was obviously just switching out two letters.
+
+The GSA helper tool did not run well on Windows.
 
 ## Validation
 
-*How did you validate that the algorithm works?*
+The algorithm was tested against output of the GSA github helper tool provided
 
 ## Running time
 
-*List experiments and results that illustrates the running time. Add figures by embedding them here, as you learned how to do in project 1.*
+Running time of preprocessing was done in project 2 and will not be repeated here.
 
+On random DNA strings the length of the string did not affect running times much. This is expected, as the suffix tree is not likely to grow much by elongating the strings of DNA, as the alphabet size is small. 
+Running times become very long if many edits are allowed, which makes sense, as the number of recursions grow exponentially with that number. 
+Reads that are random sequences of DNA are at relatively short lengths very unlikely to appear in short strings of DNA and thus our branch and bound approach stops early in many cases. Therefore increasing the read/pattern length did not really affect the running time.
+
+*Insert proof here*
