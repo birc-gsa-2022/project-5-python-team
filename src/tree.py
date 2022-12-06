@@ -117,15 +117,15 @@ class SuffixTree:
         if p == "" or self.x == "$":
             return []
         good_list=[]
-        def removEnDs(good_list):
-            x=True
-            while x:
-                x=False
-                for i, a in enumerate(good_list):
-                    if a[1][-1]=="D":
-                        del good_list[i]
-                        x=True
-            return good_list
+        # def removEnDs(good_list):
+        #     x=True
+        #     while x:
+        #         x=False
+        #         for i, a in enumerate(good_list):
+        #             if a[1][-1]=="D":
+        #                 del good_list[i]
+        #                 x=True
+        #     return good_list
         
         def search_approx_pattern(node:Knæ, p:str, edits:int,k:int, cigar:str, j:int, i:int)-> list[list,str]:
             #print(edits, k, j, i)
@@ -137,8 +137,9 @@ class SuffixTree:
                 #print("edits<0")
                 return
             if j>=P:
-                good_list.append([list(self.bft(node)),"".join(cigar)])
-                #print("HIT!")
+                if cigar[-1]!="D":
+                    good_list.append([list(self.bft(node)),"".join(cigar)])
+                    #print("HIT!")
                 return
             if self.x[u+i]=="$" and type(node.children) == int:
                 #print("reached end of branch")
@@ -168,4 +169,4 @@ class SuffixTree:
             return
             
         search_approx_pattern(self.root,p,edits,0,"",0,0)
-        return removEnDs(good_list)
+        return good_list
