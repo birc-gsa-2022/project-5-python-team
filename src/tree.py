@@ -137,9 +137,8 @@ class SuffixTree:
                 #print("edits<0")
                 return
             if j>=P:
-                if cigar[-1]!="D":
-                    good_list.append([list(self.bft(node)),"".join(cigar)])
-                    #print("HIT!")
+                good_list.append([list(self.bft(node)),"".join(cigar)])
+                #print("HIT!")
                 return
             if self.x[u+i]=="$" and type(node.children) == int:
                 #print("reached end of branch")
@@ -160,10 +159,10 @@ class SuffixTree:
             
             #Deletion:
             if "M" in cigar or "I" in cigar:
-            #Insertion:
                 new_cigar=cigar+"D"
-                search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)   
-
+                search_approx_pattern(node,p, edits-1,k+1, new_cigar, j, i+1)  
+                 
+            #Insertion:
             new_cigar=cigar+"I"
             search_approx_pattern(node,p, edits-1,k+1, new_cigar, j+1, i)
             return
