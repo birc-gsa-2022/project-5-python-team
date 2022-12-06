@@ -199,26 +199,19 @@ class fm_index:
                 continue
             if l >= r:
                 continue
-            new_cig = cig[:]
-            new_cig += 'M'
-            self.rec(p, new_l, new_r, i-1, k-edit_cost, cigars, d, new_cig)
-            # cigars.append(new_cig)
+            self.rec(p, new_l, new_r, i-1, k-edit_cost, cigars, d, cig+"M")
 
         # ins
-        new_cig = cig[:]+'I'
-        #cig += 'I'
-        self.rec(p, l, r, i-1, k-1, cigars, d, new_cig)
-        # cigars.append(new_cig)
+        self.rec(p, l, r, i-1, k-1, cigars, d, cig+"I")
 
         # del
-        new_cig = cig[:] + 'D'
-        for _, a in enumerate(self.a_map, 1):
-            new_l = self.c[a] + self.o[l][self.a_map[a]]
-            new_r = self.c[a] + self.o[r][self.a_map[a]]
-            if new_l >= new_r:
-                continue
-            self.rec(p, new_l, new_r, i, k-1, cigars, d, new_cig)
-            # cigars.append(new_cig)
+        if "M" in cig or "I" in cig:
+            for _, a in enumerate(self.a_map, 1):
+                new_l = self.c[a] + self.o[l][self.a_map[a]]
+                new_r = self.c[a] + self.o[r][self.a_map[a]]
+                if new_l >= new_r:
+                    continue
+                self.rec(p, new_l, new_r, i, k-1, cigars, d, cig+"D")
 
 
 def sa_construct(x: str) -> list[int]:
